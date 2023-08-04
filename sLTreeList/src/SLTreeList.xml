@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="sl.sltreelist.SLTreeList" pluginWidget="true" needsEntityContext="true" offlineCapable="true"
+        supportedPlatform="Web"
+        xmlns="http://www.mendix.com/widget/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
+    <name>SLTree List</name>
+    <description>Tree list widget</description>
+    <icon/>
+    <properties>
+        <propertyGroup caption="General">
+            <propertyGroup caption="DataSource">
+                <property key="listData" type="datasource" isList="true" required="false">
+                    <caption>List data</caption>
+                    <description />
+                </property>
+                <property key="listItemKey" type="attribute" dataSource="listData">
+                    <caption>Item key</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="String" />
+                        <attributeType name="Integer" />
+                    </attributeTypes>
+                </property>
+                <property key="listItemParentKey" type="attribute" dataSource="listData">
+                    <caption>Item parent key</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="String" />
+                        <attributeType name="Integer" />
+                    </attributeTypes>
+                </property>
+                <property key="listItemContent" type="widgets" dataSource="listData">
+                    <caption>Item content</caption>
+                    <description />
+                </property>
+            </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="List Item">
+            <property key="listItemIconClass" type="string" required="false">
+                <caption>Icon CSS class</caption>
+                <description>Provide a css class to render a icon</description>
+            </property>
+        </propertyGroup>
+    </properties>
+</widget>
