@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TreeListItemBase, TreeListItem } from '../TreeItem';
 
-export const useTreeListData = ({ data }: HookConfig): {listData: TreeListItem[]} => {
+export const useTreeListData = ({ data, rootParentKey }: HookConfig): {listData: TreeListItem[]} => {
   const [listData, setListData] = useState<TreeListItem[]>([]);
 
   const transformList = (data: TreeListItemBase[], rootParentKey = ''): TreeListItem[] => {
@@ -11,6 +11,8 @@ export const useTreeListData = ({ data }: HookConfig): {listData: TreeListItem[]
         parentKey?: string | number | undefined;
       }
     ): TreeListItem[] => {
+      /** TODO: Implement "search filtering"
+       */
       return list
         .filter((item) => item.parentKey === config.parentKey)
         .map((child) => ({
@@ -25,13 +27,13 @@ export const useTreeListData = ({ data }: HookConfig): {listData: TreeListItem[]
   };
 
   useEffect(() => {
-    setListData([...transformList(data)]);
-  }, [data]);
+    setListData([...transformList(data, rootParentKey)]);
+  }, [data, rootParentKey]);
 
   return {listData}
 };
 
 type HookConfig = {
   data: TreeListItem[];
-  rootParentKey?: string | number | undefined;
+  rootParentKey?: string | undefined;
 };

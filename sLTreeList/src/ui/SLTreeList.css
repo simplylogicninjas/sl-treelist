@@ -1,7 +1,6 @@
 .tree-list {
     display: flex;
     flex-direction: column;
-    gap: 2px;
     overflow: hidden;
     will-change: height;
 }
@@ -10,7 +9,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 2px;
 }
 
 .tree-list-item__list {
@@ -25,7 +23,7 @@
 .tree-list-item[data-collapsed='false'] > .tree-list-item__list {
     transform: translateY(0);
     opacity: 1;
-    transition: opacity 0.15s ease-in-out, transform 0.25s ease-in-out;
+    transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
 }
 
 .tree-list-item[data-collapsed='true'] > .tree-list-item__list > .tree-list {
@@ -36,7 +34,7 @@
     height: auto;
 }
 
-.tree-list-item[data-collapsed='false'] > .tree-list-item__container .tree-list-item__content .tree-item-icon-container {
+.tree-list-item[data-collapsed='false'] > .tree-list-item__container .tree-list-item__content .tree-item-list-toggle .tree-item-icon {
     transform: rotate(90deg);
 }
 
@@ -44,27 +42,34 @@
     position: relative;
     z-index: 1;
     display: flex;
-    padding: 4px 8px;
-    background: #eee;
-    border-radius: 4px;
 }
 
 .tree-list-item__content {
     display: flex;
-    gap: 8px;
+    flex: 1;
+}
+
+.tree-list-item__component {
     flex: 1;
 }
 
 .tree-item-spacer {
-    width: calc((var(--spacer-amount, 0) * var(--spacer-size, 10)) * 1px);
+    width: calc((var(--spacer-amount, 0) * var(--spacer-size, 14)) * 1px);
     flex-shrink: 0;
 }
 
-.tree-item-icon-container {
+.tree-item-list-toggle {
+    display: grid;
+    place-items: center;
+    cursor: default !important;
+}
+
+.tree-item-icon {
+    display: grid;
+    place-items: center;
     transition: transform .15s ease-in-out;
     transform-origin: center;
-    display: flex;
-    align-items: center;
     will-change: transform;
     min-width: 1em;
+    min-height: 1em;
 }

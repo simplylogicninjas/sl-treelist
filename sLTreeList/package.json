@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "config": {
-    "projectPath": "C:\\\\Mendix\\\\OrionGrip_V25",
+    "projectPath": "C:\\\\Mendix\\\\oriongrip-main",
     "mendixHost": "http://localhost:8080",
     "developmentPort": 3000
   },

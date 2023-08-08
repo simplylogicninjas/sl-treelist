@@ -1,39 +1,47 @@
 import { createElement, ReactNode } from 'react';
 import { useCollapse } from './hooks/useCollapse';
-import TreeItemIcon, { IconClass, IconComponent } from './TreeItemIcon';
 import TreeItemSpacer from './TreeItemSpacer';
+import TreeItemListToggle, { IconClass, IconComponent } from './TreeItemListToggle';
+import { useTreeListContext } from 'src/hooks/useTreeListContext';
 
 const TreeItem = ({
   item,
   position,
   parentCollapsed,
   icon,
-  isCollapsed = true,
-  collapseChildren = true,
+  collapseChildren = false
 }: TreeItemProps) => {
+  const treeListContext = useTreeListContext();
   const { collapsed, toggleCollapse } = useCollapse({
-    isCollapsed,
+    isCollapsed: treeListContext.itemCollapseState[item.id] ? treeListContext.itemCollapseState[item.id].collapsed : true,
     parentCollapsed,
   });
 
-  const onListItemContainerClick = () => {
+  const onListItemToggle = (item: TreeListItemData) => {
     if (item.children) {
+      treeListContext.onItemCollapse(item.id, !collapsed);
       toggleCollapse();
     }
+  }
+
+  const onListItemClick = (item: TreeListItemData) => {
+    treeListContext.onItemClick(item);
   }
 
   return (
     <div
       role={'treeitem'}
-      className={'tree-list-item'}
+      className={`tree-list-item ${item.className}`}
       data-tree-node={item.id}
       data-collapsed={collapsed}
     >
-      <div className={'tree-list-item__container'} onClick={onListItemContainerClick}>
+      <div className={'tree-list-item__container'}>
         <TreeItemSpacer position={position} />
         <div className={'tree-list-item__content'}>
-          {icon ? <TreeItemIcon icon={icon} listItemHasChildren={!!item.children?.length} /> : undefined}
-          {item.component}
+          <TreeItemListToggle icon={icon} listItemHasChildren={!!item.children?.length} onToggle={() => onListItemToggle(item)} />
+          <div className={'tree-list-item__component'} onClick={() => onListItemClick(item)}>
+            {item.component}
+          </div>
         </div>
       </div>
       {item.children &&
@@ -56,9 +64,10 @@ const TreeItem = ({
 };
 
 export type TreeListItemBase = {
-  id: string | number;
-  key: string | number;
-  parentKey?: string | number | undefined;
+  id: string;
+  key: string;
+  parentKey?: string | undefined;
+  className?: string | undefined;
   component: ReactNode | undefined;
 };
 
@@ -72,9 +81,10 @@ export type TreeItemProps = {
   item: TreeListItemData;
   position: number;
   parentCollapsed?: boolean;
-  isCollapsed?: boolean;
   collapseChildren?: boolean;
   icon?: IconClass | IconComponent;
+  onListCollapseToggle?: (item: TreeListItemData) => void;
+  onClick?: (item: TreeListItemData) => void;
 };
 
 export default TreeItem;

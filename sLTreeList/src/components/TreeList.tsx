@@ -1,22 +1,29 @@
 import { createElement } from 'react';
 import { useTreeListData } from './hooks/useTreeListData';
 import TreeItem, { TreeListItemBase } from './TreeItem';
-import { Icon } from './TreeItemIcon';
+import { Icon } from './TreeItemListToggle';
 
-const TreeList = ({ data, listItemIcon }: TreeListProps) => {
-  const {listData} = useTreeListData({ data });
+const TreeList = ({ data, listItemIcon, rootKey = ''}: TreeListProps) => {
+  const {listData} = useTreeListData({ data, rootParentKey: rootKey });
 
   return (
     <div className={'tree-list'} role={'group'}>
       {listData.map((it) => (
-        <TreeItem key={it.id} item={it} position={0} icon={listItemIcon} />
+        <TreeItem
+          key={it.id}
+          item={it}
+          position={0}
+          icon={listItemIcon}
+        />
       ))}
     </div>
   );
 };
 
-export type TreeListProps = {
+type TreeListProps = {
   data: TreeListItemBase[];
-  listItemIcon: Icon;
+  rootKey?: string | undefined;
+  listItemIcon?: Icon | undefined;
 };
+
 export default TreeList;

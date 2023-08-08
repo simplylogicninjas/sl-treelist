@@ -3,7 +3,7 @@
         supportedPlatform="Web"
         xmlns="http://www.mendix.com/widget/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
-    <name>SLTree List</name>
+    <name>SL - Tree List</name>
     <description>Tree list widget</description>
     <icon/>
     <properties>
@@ -13,6 +13,8 @@
                     <caption>List data</caption>
                     <description />
                 </property>
+            </propertyGroup>
+            <propertyGroup caption="List Item">
                 <property key="listItemKey" type="attribute" dataSource="listData">
                     <caption>Item key</caption>
                     <description />
@@ -29,17 +31,39 @@
                         <attributeType name="Integer" />
                     </attributeTypes>
                 </property>
+                <property key="rootParentKey" type="expression" required="false" defaultValue="''">
+                    <caption>Root parent key</caption>
+                    <description>Starting point for the root items inside this tree list</description>
+                    <returnType type="String" />
+                </property>
+                <property key="listItemClass" type="expression" dataSource="listData" required="false">
+                    <caption>Item class</caption>
+                    <description />
+                    <returnType type="String" />
+                </property>
+                <property key="listItemIconClass" type="string" required="false">
+                    <caption>Icon CSS class</caption>
+                    <description>Provide a css class to render a icon</description>
+                </property>
+                <property key="listItemClickAction" type="action" dataSource="listData" required="false">
+                    <caption>On Item click</caption>
+                    <description />
+                </property>
                 <property key="listItemContent" type="widgets" dataSource="listData">
                     <caption>Item content</caption>
                     <description />
                 </property>
             </propertyGroup>
         </propertyGroup>
-        <propertyGroup caption="List Item">
-            <property key="listItemIconClass" type="string" required="false">
-                <caption>Icon CSS class</caption>
-                <description>Provide a css class to render a icon</description>
+        <!-- <propertyGroup caption="Search">
+            <property key="searchValue" type="attribute" dataSource="listData">
+                <caption>Search attribute</caption>
+                <description />
+                <attributeTypes>
+                    <attributeType name="String" />
+                    <attributeType name="Integer" />
+                </attributeTypes>
             </property>
-        </propertyGroup>
+        </propertyGroup> -->
     </properties>
 </widget>

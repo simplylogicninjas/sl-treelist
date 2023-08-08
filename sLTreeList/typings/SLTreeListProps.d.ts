@@ -4,7 +4,7 @@
  * @author Mendix Widgets Framework Team
  */
 import { ComponentType, CSSProperties, ReactNode } from "react";
-import { ListValue, ListAttributeValue, ListWidgetValue } from "mendix";
+import { DynamicValue, ListValue, ListActionValue, ListAttributeValue, ListExpressionValue, ListWidgetValue } from "mendix";
 import { Big } from "big.js";
 
 export interface SLTreeListContainerProps {
@@ -15,8 +15,11 @@ export interface SLTreeListContainerProps {
     listData?: ListValue;
     listItemKey?: ListAttributeValue<string | Big>;
     listItemParentKey?: ListAttributeValue<string | Big>;
-    listItemContent?: ListWidgetValue;
+    rootParentKey?: DynamicValue<string>;
+    listItemClass?: ListExpressionValue<string>;
     listItemIconClass: string;
+    listItemClickAction?: ListActionValue;
+    listItemContent?: ListWidgetValue;
 }
 
 export interface SLTreeListPreviewProps {
@@ -31,6 +34,9 @@ export interface SLTreeListPreviewProps {
     listData: {} | { caption: string } | { type: string } | null;
     listItemKey: string;
     listItemParentKey: string;
-    listItemContent: { widgetCount: number; renderer: ComponentType<{ children: ReactNode; caption?: string }> };
+    rootParentKey: string;
+    listItemClass: string;
     listItemIconClass: string;
+    listItemClickAction: {} | null;
+    listItemContent: { widgetCount: number; renderer: ComponentType<{ children: ReactNode; caption?: string }> };
 }
