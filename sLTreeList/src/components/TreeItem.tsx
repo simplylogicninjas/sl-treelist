@@ -3,6 +3,7 @@ import { useCollapse } from './hooks/useCollapse';
 import TreeItemSpacer from './TreeItemSpacer';
 import TreeItemListToggle, { IconClass, IconComponent } from './TreeItemListToggle';
 import { useTreeListContext } from 'src/hooks/useTreeListContext';
+import { useActiveItemContext } from 'src/context/activeitem.contex';
 
 const TreeItem = ({
   item,
@@ -12,26 +13,27 @@ const TreeItem = ({
   collapseChildren = false
 }: TreeItemProps) => {
   const treeListContext = useTreeListContext();
+  const activeItemContext = useActiveItemContext();
   const { collapsed, toggleCollapse } = useCollapse({
-    isCollapsed: treeListContext.itemCollapseState[item.id] ? treeListContext.itemCollapseState[item.id].collapsed : true,
+    isCollapsed: treeListContext.itemCollapseState![item.id] ? treeListContext.itemCollapseState![item.id].collapsed : true,
     parentCollapsed,
   });
 
   const onListItemToggle = (item: TreeListItemData) => {
     if (item.children) {
-      treeListContext.onItemCollapse(item.id, !collapsed);
+      treeListContext.onItemCollapse!(item.id, !collapsed);
       toggleCollapse();
     }
   }
 
   const onListItemClick = (item: TreeListItemData) => {
-    treeListContext.onItemClick(item);
+    treeListContext.onItemClick!(item);
   }
 
   return (
     <div
       role={'treeitem'}
-      className={`tree-list-item ${item.className}`}
+      className={`tree-list-item ${activeItemContext === item.key ? 'is-active' : ''}`}
       data-tree-node={item.id}
       data-collapsed={collapsed}
     >
@@ -44,7 +46,27 @@ const TreeItem = ({
           </div>
         </div>
       </div>
-      {item.children &&
+      {
+        item.children && (
+          <div className={'tree-list-item__list'}>
+            <div className={'tree-list'} role="group">
+              {
+                item.children.map(child => (
+                  <TreeItem
+                    key={child.id}
+                    item={child}
+                    icon={icon}
+                    position={position + 1}
+                    collapseChildren={collapseChildren}
+                    parentCollapsed={collapseChildren && collapsed}
+                  />
+                ))
+              }
+            </div>
+          </div>
+        )
+      }
+      {/* {item.children &&
         item.children.map((child) => (
           <div className={'tree-list-item__list'}>
             <div className={'tree-list'} role="group">
@@ -58,7 +80,7 @@ const TreeItem = ({
               />
             </div>
           </div>
-        ))}
+        ))} */}
     </div>
   );
 };
@@ -83,8 +105,6 @@ export type TreeItemProps = {
   parentCollapsed?: boolean;
   collapseChildren?: boolean;
   icon?: IconClass | IconComponent;
-  onListCollapseToggle?: (item: TreeListItemData) => void;
-  onClick?: (item: TreeListItemData) => void;
 };
 
 export default TreeItem;

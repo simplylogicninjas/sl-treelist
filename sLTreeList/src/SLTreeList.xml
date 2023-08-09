@@ -36,8 +36,8 @@
                     <description>Starting point for the root items inside this tree list</description>
                     <returnType type="String" />
                 </property>
-                <property key="listItemClass" type="expression" dataSource="listData" required="false">
-                    <caption>Item class</caption>
+                <property key="activeItemKey" type="expression" required="false" defaultValue="''">
+                    <caption>Active item key</caption>
                     <description />
                     <returnType type="String" />
                 </property>

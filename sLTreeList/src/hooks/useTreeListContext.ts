@@ -1,20 +1,14 @@
-import React, {createContext, useContext} from 'react';
+import {createContext, useContext} from 'react';
 import { TreeListItemBase } from "../components/TreeItem";
 
-let context: React.Context<Config>;
-
-export const initTreeListContext = (config: Config) => {
-    context = createContext(config);
-
-    return context;
-}
+export const TreeListContext = createContext<TreeListContextConfig>({});;
 
 export const useTreeListContext = () => {
-    return useContext(context);
+    return useContext(TreeListContext);
 }
 
-type Config = {
-    onItemClick: (item: TreeListItemBase) => void;
-    onItemCollapse: (itemId: string, collapsed: boolean) => void;
-    itemCollapseState: {[key: string]: {collapsed: boolean}};
+export type TreeListContextConfig = {
+    onItemClick?: (item: TreeListItemBase) => void;
+    onItemCollapse?: (itemId: string, collapsed: boolean) => void;
+    itemCollapseState?: {[key: string]: {collapsed: boolean}};
 }

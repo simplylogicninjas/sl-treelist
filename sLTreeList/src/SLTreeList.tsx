@@ -8,7 +8,8 @@ import "./ui/SLTreeList.css";
 import TreeList from "./components/TreeList";
 import { useTransformMxDataSource } from "./hooks/useTransformMxDataSource";
 import { TreeListItemBase } from "./components/TreeItem";
-import { initTreeListContext } from "./hooks/useTreeListContext";
+import { TreeListContext, TreeListContextConfig } from "./hooks/useTreeListContext";
+import { ActiveItemContext } from "./context/activeitem.contex";
 // import TreeListSearch from "./components/TreeListSearch";
 
 export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
@@ -17,10 +18,10 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
         listItemKey,
         listItemParentKey,
         listItemContent,
-        listItemClass,
         listItemClickAction,
         listItemIconClass,
-        rootParentKey
+        rootParentKey,
+        activeItemKey
         // searchValue
     } = props;
     // const searchValueRef = useRef<ListAttributeValue | undefined>();
@@ -32,16 +33,9 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
         listValue: deferredListData,
         attributeValueKey: listItemKey,
         attributeValueParentKey: listItemParentKey,
-        classValue: listItemClass,
         widgetValue: listItemContent
     })
     const deferredData = useDeferredValue(data);
-
-    useEffect(() => {
-        if (deferredListData?.status === ValueStatus.Available && deferredListData.items?.length) {
-            listDataRef.current = [...deferredListData.items];
-        }
-    }, [deferredListData?.status, deferredListData?.items?.length]);
 
     // useEffect(() => {
     //     searchValueRef.current = searchValue;
@@ -65,12 +59,11 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
         itemCollapsedState.current[itemId] = {collapsed};
     }
 
-    const TreeListContextValue = {
+    const TreeListContextValue: TreeListContextConfig = {
         onItemClick,
         onItemCollapse,
         itemCollapseState: itemCollapsedState.current
     }
-    const TreeListContext = initTreeListContext(TreeListContextValue)
 
     // const onSearch = (value: string) => {
     //     if (listData && searchValueRef.current && searchValueRef.current.filterable) {
@@ -80,18 +73,26 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
     //     }
     // }
 
+    useEffect(() => {
+        if (deferredListData?.status === ValueStatus.Available && deferredListData.items?.length) {
+            listDataRef.current = [...deferredListData.items];
+        }
+    }, [deferredListData?.status, deferredListData?.items?.length]);
+
     return (
-        <TreeListContext.Provider value={TreeListContextValue}>
-            <div data-name={props.name} className={`sl-tree-list ${props.class}`} style={props.style}>
-                {/* <div className={'sl-tree-list__header'}>
-                    <TreeListSearch onSearch={onSearch} />
-                </div> */}
-                <TreeList
-                    data={deferredData}
-                    rootKey={rootParentKey?.value}
-                    listItemIcon={listItemIconClass !== '' ? {type: 'class', iconClass: listItemIconClass} : undefined}
-                />
-            </div>
+        <TreeListContext.Provider value={{...TreeListContextValue}}>
+            <ActiveItemContext.Provider value={activeItemKey?.value}>
+                <div data-name={props.name} className={`sl-tree-list ${props.class}`} style={props.style}>
+                    {/* <div className={'sl-tree-list__header'}>
+                        <TreeListSearch onSearch={onSearch} />
+                    </div> */}
+                    <TreeList
+                        data={deferredData}
+                        rootKey={rootParentKey?.value}
+                        listItemIcon={listItemIconClass !== '' ? {type: 'class', iconClass: listItemIconClass} : undefined}
+                    />
+                </div>
+            </ActiveItemContext.Provider>
         </TreeListContext.Provider>  
     );
 }
