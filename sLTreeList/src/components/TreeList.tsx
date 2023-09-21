@@ -1,4 +1,4 @@
-import { createElement, memo } from 'react';
+import { createElement } from 'react';
 import { useTreeListData } from './hooks/useTreeListData';
 import TreeItem, { TreeListItemBase } from './TreeItem';
 import { Icon } from './TreeItemListToggle';
@@ -26,8 +26,10 @@ type TreeListProps = {
   listItemIcon?: Icon | undefined;
 };
 
-export default memo(TreeList, (oldProps, newProps) => {
-  return (
-    JSON.stringify(oldProps.data) === JSON.stringify(newProps.data)
-  );
-});
+// export default memo(TreeList, (oldProps, newProps) => {
+//   return (
+//     JSON.stringify(oldProps.data) === JSON.stringify(newProps.data)
+//   );
+// });
+
+export default TreeList

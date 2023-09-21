@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { TreeListItemBase, TreeListItem } from '../TreeItem';
+import { arraysEqual } from 'src/utils/utils';
 
 export const useTreeListData = ({ data,  rootParentKey }: HookConfig): {listData: TreeListItem[]} => {
   const listDataRef = useRef<TreeListItem[]>([]);
+  const dataRef = useRef<TreeListItemBase[]>([]);
   const [listData, setListData] = useState<TreeListItem[]>([]);
 
   const transformList = (data: TreeListItemBase[], rootParentKey = '') => {
@@ -24,17 +26,18 @@ export const useTreeListData = ({ data,  rootParentKey }: HookConfig): {listData
         })) as TreeListItem[];
     };
 
-    const transformedList =  dataToTreeData(data, {parentKey: rootParentKey});
+    const transformedList = dataToTreeData(data, {parentKey: rootParentKey});
 
-    if (JSON.stringify(transformedList) !== JSON.stringify(listDataRef.current)) {
-      setListData(transformedList);
+    if (!arraysEqual(listDataRef.current, transformedList)) {
+      setListData([...transformedList]);
       listDataRef.current = transformedList;
     }
   };
 
   useEffect(() => {
     transformList(data, rootParentKey);
-  }, [data, rootParentKey]);
+    dataRef.current = [...data];
+  }, [data.length, !arraysEqual(dataRef.current, data), rootParentKey]);
 
   return {listData}
 };

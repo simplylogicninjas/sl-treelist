@@ -6,6 +6,7 @@ export const useTransformMxDataSource = ({
     listValue,
     attributeValueKey,
     attributeValueParentKey,
+    sequence,
     widgetValue
 }: Config): {data: TreeListItemBase[]} => {
     const dataRef = useRef<TreeListItemBase[]>([]);
@@ -15,11 +16,13 @@ export const useTransformMxDataSource = ({
         items,
         valueKey,
         parentValueKey,
+        sequenceValue,
         widgetValue
     }: {
         items: ObjectItem[],
         valueKey: ListAttributeValue,
         parentValueKey: ListAttributeValue,
+        sequenceValue: ListAttributeValue | undefined,
         widgetValue: ListWidgetValue
     }) => {
         const transformedData = await Promise.all(items.map(async (item) => {
@@ -36,6 +39,7 @@ export const useTransformMxDataSource = ({
                 id: item.id.toString(),
                 key: key.toString(),
                 parentKey: parentKey?.toString(),
+                sequence: sequenceValue?.get(item).value?.toString(),
                 component
             } as TreeListItemBase;
         }))
@@ -43,8 +47,8 @@ export const useTransformMxDataSource = ({
         const filtered = transformedData.filter(it => !!it) as TreeListItemBase[];
 
         if (JSON.stringify(filtered) !== JSON.stringify(dataRef.current)) {
-            setData(filtered);
-            dataRef.current = filtered;
+            setData([...filtered]);
+            dataRef.current = [...filtered];
         }
     }
 
@@ -54,14 +58,17 @@ export const useTransformMxDataSource = ({
                 items: listValue.items ?? [],
                 valueKey: attributeValueKey,
                 parentValueKey: attributeValueParentKey,
+                sequenceValue: sequence,
                 widgetValue: widgetValue
             })
         }
     }, [
         listValue?.status,
         listValue?.items?.length,
+        listValue?.items,
         attributeValueKey,
         attributeValueParentKey,
+        sequence,
         widgetValue
     ])
 
@@ -73,5 +80,6 @@ type Config = {
     listValue: ListValue | undefined;
     attributeValueKey: ListAttributeValue | undefined;
     attributeValueParentKey: ListAttributeValue | undefined;
+    sequence: ListAttributeValue | undefined;
     widgetValue: ListWidgetValue | undefined;
 }

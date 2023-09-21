@@ -31,6 +31,14 @@
                         <attributeType name="Integer" />
                     </attributeTypes>
                 </property>
+                <property key="listItemSequence" type="attribute" dataSource="listData" required="false">
+                    <caption>Item sequence</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="String" />
+                        <attributeType name="Integer" />
+                    </attributeTypes>
+                </property>
                 <property key="rootParentKey" type="expression" required="false" defaultValue="''">
                     <caption>Root parent key</caption>
                     <description>Starting point for the root items inside this tree list</description>
@@ -52,6 +60,10 @@
                 <property key="listItemContent" type="widgets" dataSource="listData">
                     <caption>Item content</caption>
                     <description />
+                </property>
+                <property key="empyStateWidget" type="widgets" required="false">
+                    <caption>Empty state container</caption>
+                    <description>Place widgets here to show a empty state if the list has 0 items</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

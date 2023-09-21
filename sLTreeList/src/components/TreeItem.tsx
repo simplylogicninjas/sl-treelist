@@ -89,6 +89,7 @@ export type TreeListItemBase = {
   id: string;
   key: string;
   parentKey?: string | undefined;
+  sequence?: string | number | undefined;
   className?: string | undefined;
   component: ReactNode | undefined;
 };

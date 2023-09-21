@@ -15,11 +15,13 @@ export interface SLTreeListContainerProps {
     listData?: ListValue;
     listItemKey?: ListAttributeValue<string | Big>;
     listItemParentKey?: ListAttributeValue<string | Big>;
+    listItemSequence?: ListAttributeValue<string | Big>;
     rootParentKey?: DynamicValue<string>;
     activeItemKey?: DynamicValue<string>;
     listItemIconClass: string;
     listItemClickAction?: ListActionValue;
     listItemContent?: ListWidgetValue;
+    empyStateWidget?: ReactNode;
 }
 
 export interface SLTreeListPreviewProps {
@@ -34,9 +36,11 @@ export interface SLTreeListPreviewProps {
     listData: {} | { caption: string } | { type: string } | null;
     listItemKey: string;
     listItemParentKey: string;
+    listItemSequence: string;
     rootParentKey: string;
     activeItemKey: string;
     listItemIconClass: string;
     listItemClickAction: {} | null;
     listItemContent: { widgetCount: number; renderer: ComponentType<{ children: ReactNode; caption?: string }> };
+    empyStateWidget: { widgetCount: number; renderer: ComponentType<{ children: ReactNode; caption?: string }> };
 }

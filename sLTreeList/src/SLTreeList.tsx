@@ -17,11 +17,13 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
         listData,
         listItemKey,
         listItemParentKey,
+        listItemSequence,
         listItemContent,
         listItemClickAction,
         listItemIconClass,
         rootParentKey,
-        activeItemKey
+        activeItemKey,
+        empyStateWidget
         // searchValue
     } = props;
     // const searchValueRef = useRef<ListAttributeValue | undefined>();
@@ -32,6 +34,7 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
     const {data} = useTransformMxDataSource({
         listValue: deferredListData,
         attributeValueKey: listItemKey,
+        sequence: listItemSequence,
         attributeValueParentKey: listItemParentKey,
         widgetValue: listItemContent
     })
@@ -73,25 +76,35 @@ export function SLTreeList(props: SLTreeListContainerProps): ReactElement {
     //     }
     // }
 
+    const renderTreeList = (data: TreeListItemBase[]) => {
+        if (!data.length && empyStateWidget) {
+            return empyStateWidget;
+        }
+
+        return (
+            <div data-name={props.name} className={`sl-tree-list ${props.class}`} style={props.style}>
+                {/* <div className={'sl-tree-list__header'}>
+                    <TreeListSearch onSearch={onSearch} />
+                </div> */}
+                <TreeList
+                    data={[...data]}
+                    rootKey={rootParentKey?.value}
+                    listItemIcon={listItemIconClass !== '' ? {type: 'class', iconClass: listItemIconClass} : undefined}
+                />
+            </div>
+        )
+    }
+
     useEffect(() => {
         if (deferredListData?.status === ValueStatus.Available && deferredListData.items?.length) {
             listDataRef.current = [...deferredListData.items];
         }
-    }, [deferredListData?.status, deferredListData?.items?.length]);
+    }, [deferredListData?.status, deferredListData?.items?.length, JSON.stringify(deferredListData?.items ?? []) !== JSON.stringify(listDataRef.current)]);
 
     return (
         <TreeListContext.Provider value={{...TreeListContextValue}}>
             <ActiveItemContext.Provider value={activeItemKey?.value}>
-                <div data-name={props.name} className={`sl-tree-list ${props.class}`} style={props.style}>
-                    {/* <div className={'sl-tree-list__header'}>
-                        <TreeListSearch onSearch={onSearch} />
-                    </div> */}
-                    <TreeList
-                        data={deferredData}
-                        rootKey={rootParentKey?.value}
-                        listItemIcon={listItemIconClass !== '' ? {type: 'class', iconClass: listItemIconClass} : undefined}
-                    />
-                </div>
+                {renderTreeList(deferredData)}
             </ActiveItemContext.Provider>
         </TreeListContext.Provider>  
     );
